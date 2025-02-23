@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/8d06902f150348459a6bcf79b3b4b34d/artifacts
+end_time: 1739478712469
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8d06902f150348459a6bcf79b3b4b34d
+run_name: popular-trout-265
+run_uuid: 8d06902f150348459a6bcf79b3b4b34d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739478712443
+status: 3
+tags: []
+user_id: linda_wsl

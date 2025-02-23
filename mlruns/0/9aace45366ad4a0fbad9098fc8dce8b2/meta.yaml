@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/9aace45366ad4a0fbad9098fc8dce8b2/artifacts
+end_time: 1739478703283
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9aace45366ad4a0fbad9098fc8dce8b2
+run_name: intelligent-doe-974
+run_uuid: 9aace45366ad4a0fbad9098fc8dce8b2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739478699791
+status: 3
+tags: []
+user_id: linda_wsl

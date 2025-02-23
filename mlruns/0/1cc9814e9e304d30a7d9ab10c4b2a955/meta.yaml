@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1cc9814e9e304d30a7d9ab10c4b2a955/artifacts
+end_time: 1740318468842
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1cc9814e9e304d30a7d9ab10c4b2a955
+run_name: capricious-ray-209
+run_uuid: 1cc9814e9e304d30a7d9ab10c4b2a955
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740318468811
+status: 3
+tags: []
+user_id: linda_wsl

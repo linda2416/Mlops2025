@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/6243f202af5a4f5686f8460338f6b436/artifacts
+end_time: 1740321094015
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6243f202af5a4f5686f8460338f6b436
+run_name: overjoyed-smelt-330
+run_uuid: 6243f202af5a4f5686f8460338f6b436
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740321087910
+status: 3
+tags: []
+user_id: linda_wsl

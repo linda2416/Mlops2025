@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/23c9e6615ca84587b1c9a01be0f1c7ce/artifacts
+end_time: 1740320501228
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 23c9e6615ca84587b1c9a01be0f1c7ce
+run_name: unleashed-koi-932
+run_uuid: 23c9e6615ca84587b1c9a01be0f1c7ce
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740320495227
+status: 3
+tags: []
+user_id: linda_wsl

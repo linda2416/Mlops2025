@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/0911a128ccf14bcf8739fdc34012f836/artifacts
+end_time: 1740318883188
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0911a128ccf14bcf8739fdc34012f836
+run_name: lyrical-auk-508
+run_uuid: 0911a128ccf14bcf8739fdc34012f836
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740318878695
+status: 4
+tags: []
+user_id: linda_wsl
