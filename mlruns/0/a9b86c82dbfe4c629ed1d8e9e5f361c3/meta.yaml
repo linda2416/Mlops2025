@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/a9b86c82dbfe4c629ed1d8e9e5f361c3/artifacts
+end_time: 1740331374956
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a9b86c82dbfe4c629ed1d8e9e5f361c3
+run_name: rumbling-asp-431
+run_uuid: a9b86c82dbfe4c629ed1d8e9e5f361c3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740331374937
+status: 3
+tags: []
+user_id: linda_wsl

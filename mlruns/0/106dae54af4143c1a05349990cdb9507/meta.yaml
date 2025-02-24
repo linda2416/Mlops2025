@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/106dae54af4143c1a05349990cdb9507/artifacts
+end_time: 1740329926399
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 106dae54af4143c1a05349990cdb9507
+run_name: monumental-trout-300
+run_uuid: 106dae54af4143c1a05349990cdb9507
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740329926363
+status: 4
+tags: []
+user_id: linda_wsl

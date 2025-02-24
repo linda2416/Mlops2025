@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1d8377ea21104001b3f407e0c4736963/artifacts
+end_time: 1740329863348
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1d8377ea21104001b3f407e0c4736963
+run_name: overjoyed-ray-515
+run_uuid: 1d8377ea21104001b3f407e0c4736963
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740329863306
+status: 3
+tags: []
+user_id: linda_wsl

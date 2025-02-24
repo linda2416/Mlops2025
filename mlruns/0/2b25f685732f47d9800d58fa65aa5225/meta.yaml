@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/2b25f685732f47d9800d58fa65aa5225/artifacts
+end_time: 1740330606280
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2b25f685732f47d9800d58fa65aa5225
+run_name: secretive-lynx-650
+run_uuid: 2b25f685732f47d9800d58fa65aa5225
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740330606255
+status: 3
+tags: []
+user_id: linda_wsl

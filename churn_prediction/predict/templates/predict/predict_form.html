@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Churn</title>
+</head>
+<body>
+    <h1>Prédiction de Churn</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="account_length">Account Length:</label>
+        <input type="text" id="account_length" name="account_length"><br><br>
+
+        <label for="international_plan">International Plan:</label>
+        <input type="text" id="international_plan" name="international_plan"><br><br>
+
+        <label for="voice_mail_plan">Voice Mail Plan:</label>
+        <input type="text" id="voice_mail_plan" name="voice_mail_plan"><br><br>
+
+        <label for="number_vmail_messages">Number of Voice Mail Messages:</label>
+        <input type="text" id="number_vmail_messages" name="number_vmail_messages"><br><br>
+
+        <label for="total_day_minutes">Total Day Minutes:</label>
+        <input type="text" id="total_day_minutes" name="total_day_minutes"><br><br>
+
+        <label for="total_day_calls">Total Day Calls:</label>
+        <input type="text" id="total_day_calls" name="total_day_calls"><br><br>
+
+        <label for="total_day_charge">Total Day Charge:</label>
+        <input type="text" id="total_day_charge" name="total_day_charge"><br><br>
+
+        <label for="total_eve_minutes">Total Evening Minutes:</label>
+        <input type="text" id="total_eve_minutes" name="total_eve_minutes"><br><br>
+
+        <label for="total_eve_calls">Total Evening Calls:</label>
+        <input type="text" id="total_eve_calls" name="total_eve_calls"><br><br>
+
+        <label for="total_night_minutes">Total Night Minutes:</label>
+        <input type="text" id="total_night_minutes" name="total_night_minutes"><br><br>
+
+        <label for="total_night_calls">Total Night Calls:</label>
+        <input type="text" id="total_night_calls" name="total_night_calls"><br><br>
+
+        <label for="total_intl_minutes">Total International Minutes:</label>
+        <input type="text" id="total_intl_minutes" name="total_intl_minutes"><br><br>
+
+        <label for="total_intl_calls">Total International Calls:</label>
+        <input type="text" id="total_intl_calls" name="total_intl_calls"><br><br>
+
+        <label for="customer_service_calls">Customer Service Calls:</label>
+        <input type="text" id="customer_service_calls" name="customer_service_calls"><br><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction is not None %}
+        <h2>Prediction: {{ prediction }}</h2>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/21d8f3ae67e3457183afc07f3a5e38fd/artifacts
+end_time: 1740331375041
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 21d8f3ae67e3457183afc07f3a5e38fd
+run_name: treasured-horse-541
+run_uuid: 21d8f3ae67e3457183afc07f3a5e38fd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740331374968
+status: 4
+tags: []
+user_id: linda_wsl

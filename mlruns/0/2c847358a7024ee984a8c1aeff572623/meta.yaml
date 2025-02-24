@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/2c847358a7024ee984a8c1aeff572623/artifacts
+end_time: 1740333725092
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2c847358a7024ee984a8c1aeff572623
+run_name: fearless-horse-188
+run_uuid: 2c847358a7024ee984a8c1aeff572623
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740333724921
+status: 3
+tags: []
+user_id: linda_wsl

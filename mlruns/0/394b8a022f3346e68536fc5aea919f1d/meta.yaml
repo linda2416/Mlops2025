@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/394b8a022f3346e68536fc5aea919f1d/artifacts
+end_time: 1740329065533
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 394b8a022f3346e68536fc5aea919f1d
+run_name: blushing-fly-964
+run_uuid: 394b8a022f3346e68536fc5aea919f1d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740329061877
+status: 3
+tags: []
+user_id: linda_wsl

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/4045fd5b482d488fb7a96f3bc95963a8/artifacts
+end_time: 1740333593248
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4045fd5b482d488fb7a96f3bc95963a8
+run_name: upset-stag-123
+run_uuid: 4045fd5b482d488fb7a96f3bc95963a8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740333593216
+status: 4
+tags: []
+user_id: linda_wsl

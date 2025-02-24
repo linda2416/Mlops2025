@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/3aef9376badb433cb29c3762ec5a268e/artifacts
+end_time: 1740330291834
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3aef9376badb433cb29c3762ec5a268e
+run_name: victorious-cod-601
+run_uuid: 3aef9376badb433cb29c3762ec5a268e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740330291818
+status: 3
+tags: []
+user_id: linda_wsl

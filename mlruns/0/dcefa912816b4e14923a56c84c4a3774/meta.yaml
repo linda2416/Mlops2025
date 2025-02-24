@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/dcefa912816b4e14923a56c84c4a3774/artifacts
+end_time: 1740338707625
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: dcefa912816b4e14923a56c84c4a3774
+run_name: dazzling-fish-420
+run_uuid: dcefa912816b4e14923a56c84c4a3774
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740338707411
+status: 3
+tags: []
+user_id: linda_wsl

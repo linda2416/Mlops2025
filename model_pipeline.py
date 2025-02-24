@@ -10,6 +10,8 @@ from imblearn.over_sampling import SMOTE
 import pickle
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+import mlflow
+import logging
 
 def prepare_data():
     """Load and preprocess the dataset."""
@@ -39,22 +41,22 @@ def prepare_data():
     features_scaled = feature_scaler.fit_transform(features)
     print("Standardization completed")
 
-    logging.info(f"Data before PCA: {features_scaled.shape}")
-    pca_transformer = PCA(n_components=0.95)
-    features_pca = pca_transformer.fit_transform(features_scaled)
-    logging.info(f"Data after PCA: {features_pca.shape}")
-    print(f"Data after PCA: {features_pca.shape}")
-
     print("Data preprocessing completed!")
-    return features_pca, target, feature_scaler, pca_transformer
-
-import logging
+    return features_scaled, target, feature_scaler, None
 
 def train_model(train_features, train_labels):
     logging.basicConfig(level=logging.INFO)
     logging.info("Starting model training...")
     """Train a Logistic Regression model with SMOTE and ENN for handling class imbalance."""
     try:
+        # Apply PCA transformation
+        pca_transformer = PCA(n_components=0.95)
+        train_features = pca_transformer.fit_transform(train_features)
+        
+        # Log PCA parameters
+        mlflow.log_param("pca_n_components", 0.95)
+        mlflow.log_param("pca_explained_variance", sum(pca_transformer.explained_variance_ratio_))
+        
         print("Shape of data before SMOTE:", train_features.shape)
         print("Shape of labels before SMOTE:", train_labels.shape)
 
@@ -72,11 +74,18 @@ def train_model(train_features, train_labels):
 
         # Train the Logistic Regression model
         logging.info("Training the Logistic Regression model...")
-        log_reg_model = LogisticRegression(random_state=42, max_iter=1000)  # Increase max_iter if needed
+        log_reg_model = LogisticRegression(random_state=42, max_iter=1000, class_weight='balanced')
+        
+        # Log model parameters
+        mlflow.log_param("model_type", "LogisticRegression")
+        mlflow.log_param("random_state", 42)
+        mlflow.log_param("max_iter", 1000)
+        mlflow.log_param("class_weight", "balanced")
+        
         log_reg_model.fit(X_resampled_enn, Y_resampled_enn)
         logging.info("Model training completed!")
 
-        return log_reg_model
+        return log_reg_model, pca_transformer
 
     except Exception as e:
         logging.error(f"Error during model training: {e}")
@@ -89,22 +98,44 @@ def evaluate_model(model_instance, test_features, test_labels):
     # Generate predictions
     predictions = model_instance.predict(test_features)
 
-    # Calculate accuracy
+    # Calculate metrics
     accuracy = accuracy_score(test_labels, predictions)
-
-    # Generate classification report
-    report = classification_report(test_labels, predictions)
-
-    # Generate confusion matrix
+    report = classification_report(test_labels, predictions, output_dict=True)
     conf_matrix = confusion_matrix(test_labels, predictions)
+
+    # Log metrics to MLflow
+    mlflow.log_metric("accuracy", accuracy)
+    mlflow.log_metric("precision_false", report['False']['precision'])
+    mlflow.log_metric("precision_true", report['True']['precision'])
+    mlflow.log_metric("recall_false", report['False']['recall'])
+    mlflow.log_metric("recall_true", report['True']['recall'])
+    mlflow.log_metric("f1_false", report['False']['f1-score'])
+    mlflow.log_metric("f1_true", report['True']['f1-score'])
+    
+    # Log confusion matrix
+    mlflow.log_artifact(plot_confusion_matrix(conf_matrix), "confusion_matrix.png")
 
     # Print out the results
     print(f"Model Accuracy: {accuracy:.4f}")
-    print("Classification Report:\n", report)
+    print("Classification Report:\n", classification_report(test_labels, predictions))
     print("Confusion Matrix:\n", conf_matrix)
 
     # Return accuracy for logging
     return accuracy
+
+def plot_confusion_matrix(conf_matrix):
+    """Plot and save confusion matrix."""
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=['False', 'True'],
+                yticklabels=['False', 'True'])
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.title('Confusion Matrix')
+    file_path = 'confusion_matrix.png'
+    plt.savefig(file_path)
+    plt.close()
+    return file_path
 
 def save_model(model_instance, feature_scaler, pca_transformer):
     """Save model and preprocessing artifacts using pickle."""
@@ -113,8 +144,9 @@ def save_model(model_instance, feature_scaler, pca_transformer):
         pickle.dump(model_instance, model_file)
     with open("./scaler.pkl", "wb") as scaler_file:
         pickle.dump(feature_scaler, scaler_file)
-    with open("./pca.pkl", "wb") as pca_file:
-        pickle.dump(pca_transformer, pca_file)
+    if pca_transformer:
+        with open("./pca.pkl", "wb") as pca_file:
+            pickle.dump(pca_transformer, pca_file)
     print("Model, scaler, and PCA saved successfully!")
 
 def load_model():

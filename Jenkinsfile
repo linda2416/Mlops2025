@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        PYTHON = '/usr/bin/python3'  // Spécifiez le chemin absolu vers python3
-        ENV_NAME = 'venv'
+        PYTHON = '/usr/bin/python3'  // System Python path in the Jenkins container
+        ENV_NAME = 'venv'            // Virtual environment name
         REQUIREMENTS = 'requirements.txt'
         SOURCE_DIR = 'model_pipeline.py'
         MAIN_SCRIPT = 'main.py'
@@ -20,9 +20,12 @@ pipeline {
                 script {
                     echo '🔧 Setting up the virtual environment and installing dependencies...'
                     sh '''
-                        /usr/bin/python3 -m venv ${ENV_NAME}  // Spécifiez python3
-                        ./${ENV_NAME}/bin/python3 -m pip install --upgrade pip
-                        ./${ENV_NAME}/bin/python3 -m pip install -r ${REQUIREMENTS}
+                        # Create the virtual environment in the current working directory (no /bin access)
+                        ${PYTHON} -m venv ${WORKSPACE}/${ENV_NAME}
+                        # Upgrade pip
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 -m pip install --upgrade pip
+                        # Install dependencies from the requirements file
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 -m pip install -r ${REQUIREMENTS}
                     '''
                     echo '✅ Environment set up successfully!'
                 }
@@ -34,9 +37,8 @@ pipeline {
                 script {
                     echo '🛠 Checking code quality...'
                     sh '''
-                        source ${ENV_NAME}/bin/activate
-                        ${PYTHON} -m black --exclude 'venv|mlops_env' .
-                        ${PYTHON} -m pylint --disable=C,R ${SOURCE_DIR} || true
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 -m black --exclude 'venv|mlops_env' .
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 -m pylint --disable=C,R ${SOURCE_DIR} || true
                     '''
                     echo '✅ Code verified successfully!'
                 }
@@ -48,8 +50,7 @@ pipeline {
                 script {
                     echo '📊 Preparing data...'
                     sh '''
-                        source ${ENV_NAME}/bin/activate
-                        ./${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --prepare
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --prepare
                     '''
                     echo '✅ Data prepared successfully!'
                 }
@@ -61,8 +62,7 @@ pipeline {
                 script {
                     echo '🚀 Training the model...'
                     sh '''
-                        source ${ENV_NAME}/bin/activate
-                        ./${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --train
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --train
                     '''
                     echo '✅ Model trained successfully!'
                 }
@@ -82,8 +82,7 @@ pipeline {
                             echo "⚠️  No tests found! Creating a basic test..."
                             echo 'def test_dummy(): assert 2 + 2 == 4' > ${TEST_DIR}/test_dummy.py
                         fi
-                        source ${ENV_NAME}/bin/activate
-                        ./${ENV_NAME}/bin/python3 -m pytest ${TEST_DIR} --disable-warnings
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 -m pytest ${TEST_DIR} --disable-warnings
                     '''
                     echo '✅ Tests executed successfully!'
                 }
@@ -95,8 +94,7 @@ pipeline {
                 script {
                     echo '📊 Evaluating the model...'
                     sh '''
-                        source ${ENV_NAME}/bin/activate
-                        ./${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --evaluate
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --evaluate
                     '''
                     echo '✅ Model evaluated successfully!'
                 }
@@ -108,8 +106,7 @@ pipeline {
                 script {
                     echo '💾 Saving the trained model...'
                     sh '''
-                        source ${ENV_NAME}/bin/activate
-                        ./${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --save || (echo "❌ Failed to save the model!" && exit 1)
+                        ${WORKSPACE}/${ENV_NAME}/bin/python3 ${MAIN_SCRIPT} --save || (echo "❌ Failed to save the model!" && exit 1)
                     '''
                     echo '✅ Model saved successfully!'
                 }
@@ -170,7 +167,7 @@ pipeline {
     post {
         always {
             echo '🧹 Cleaning up virtual environment...'
-            sh 'rm -rf ${ENV_NAME}'
+            sh 'rm -rf ${WORKSPACE}/${ENV_NAME}'
             echo '✅ Cleanup completed!'
         }
     }

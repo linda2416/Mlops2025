@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/8c67385267114a2996237b465cd31c80/artifacts
+end_time: 1740332610838
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8c67385267114a2996237b465cd31c80
+run_name: legendary-duck-604
+run_uuid: 8c67385267114a2996237b465cd31c80
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740332610619
+status: 3
+tags: []
+user_id: linda_wsl

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/fb2ce746fee34c7a8848d1b022323ee8/artifacts
+end_time: 1740331529915
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fb2ce746fee34c7a8848d1b022323ee8
+run_name: blushing-squid-115
+run_uuid: fb2ce746fee34c7a8848d1b022323ee8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740331529650
+status: 4
+tags: []
+user_id: linda_wsl

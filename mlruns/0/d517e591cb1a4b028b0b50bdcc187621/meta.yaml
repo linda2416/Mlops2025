@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/d517e591cb1a4b028b0b50bdcc187621/artifacts
+end_time: 1740331675266
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d517e591cb1a4b028b0b50bdcc187621
+run_name: unleashed-slug-638
+run_uuid: d517e591cb1a4b028b0b50bdcc187621
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740331675068
+status: 3
+tags: []
+user_id: linda_wsl

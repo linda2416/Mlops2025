@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/05a7c449e82847c5a1a2288b353c9001/artifacts
+end_time: 1740331711650
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 05a7c449e82847c5a1a2288b353c9001
+run_name: marvelous-bug-986
+run_uuid: 05a7c449e82847c5a1a2288b353c9001
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740331711627
+status: 3
+tags: []
+user_id: linda_wsl

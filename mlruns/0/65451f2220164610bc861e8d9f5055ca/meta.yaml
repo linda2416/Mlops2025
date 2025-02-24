@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/65451f2220164610bc861e8d9f5055ca/artifacts
+end_time: 1740338699097
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 65451f2220164610bc861e8d9f5055ca
+run_name: victorious-flea-357
+run_uuid: 65451f2220164610bc861e8d9f5055ca
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740338698935
+status: 3
+tags: []
+user_id: linda_wsl

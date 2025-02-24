@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/212f22dd0e85418eaab1e77703f24fde/artifacts
+end_time: 1740330620761
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 212f22dd0e85418eaab1e77703f24fde
+run_name: funny-eel-808
+run_uuid: 212f22dd0e85418eaab1e77703f24fde
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740330620739
+status: 3
+tags: []
+user_id: linda_wsl

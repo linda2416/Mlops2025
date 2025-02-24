@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/2cb2a26e51b44fb3a35106e04464040b/artifacts
+end_time: 1740333703538
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2cb2a26e51b44fb3a35106e04464040b
+run_name: big-sloth-204
+run_uuid: 2cb2a26e51b44fb3a35106e04464040b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740333703503
+status: 3
+tags: []
+user_id: linda_wsl

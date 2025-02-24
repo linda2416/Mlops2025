@@ -82,7 +82,7 @@ all: setup verify prepare train test evaluate save_model
 # Run FastAPI
 run_api:
 	@echo "🚀 Démarrage de l'API FastAPI..."
-	@./$(ENV_NAME)/bin/uvicorn app:app --reload --host 0.0.0.0 --port 8000
+	@./$(ENV_NAME)/bin/uvicorn app:app --reload --host 0.0.0.0 --port 8002
 
 # ---------------------
 # Tâches Docker

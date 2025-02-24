@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/06f65dfac2ce41ff93a5c5d22a6b849d/artifacts
+end_time: 1740332595930
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 06f65dfac2ce41ff93a5c5d22a6b849d
+run_name: tasteful-ape-76
+run_uuid: 06f65dfac2ce41ff93a5c5d22a6b849d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740332595891
+status: 3
+tags: []
+user_id: linda_wsl

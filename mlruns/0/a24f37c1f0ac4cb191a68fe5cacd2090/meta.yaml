@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/a24f37c1f0ac4cb191a68fe5cacd2090/artifacts
+end_time: 1740330291877
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a24f37c1f0ac4cb191a68fe5cacd2090
+run_name: beautiful-vole-371
+run_uuid: a24f37c1f0ac4cb191a68fe5cacd2090
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740330291847
+status: 4
+tags: []
+user_id: linda_wsl
