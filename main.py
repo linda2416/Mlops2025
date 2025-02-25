@@ -4,29 +4,46 @@ import numpy as np
 import pandas as pd
 import argparse
 from sklearn.model_selection import train_test_split
-from model_pipeline import prepare_data, train_model, evaluate_model, save_model, load_model
+from model_pipeline import (
+    prepare_data,
+    train_model,
+    evaluate_model,
+    save_model,
+    load_model,
+)
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="ML Pipeline")
-    parser.add_argument('--prepare', action='store_true', help='Prepare data')
-    parser.add_argument('--train', action='store_true', help='Train model')
-    parser.add_argument('--evaluate', action='store_true', help='Evaluate model')
-    parser.add_argument('--save', action='store_true', help='Save model')
-    parser.add_argument('--load', action='store_true', help='Load model')
+    parser.add_argument("--prepare", action="store_true", help="Prepare data")
+    parser.add_argument("--train", action="store_true", help="Train model")
+    parser.add_argument("--evaluate", action="store_true", help="Evaluate model")
+    parser.add_argument("--save", action="store_true", help="Save model")
+    parser.add_argument("--load", action="store_true", help="Load model")
     return parser.parse_args()
 
-def run_pipeline(args):
-    mlflow.set_tracking_uri("http://localhost:5001")
-    print("Script execution started...")
+
+def run_pipeline(args, tracking_uri="http://localhost:5001"):
+    mlflow.set_tracking_uri(tracking_uri)
+    print("Script execution started... Ensure to push changes to GitHub for version control.")
 
     with mlflow.start_run():
         if args.prepare:
             X_processed, y_processed, data_scaler, pca_processor = prepare_data()
             print("Data preparation finished")
-            return X_processed, y_processed, data_scaler, pca_processor
 
         if args.train:
-            X_processed, y_processed, _, _ = prepare_data()
+            # Ensure data is prepared only if training
+            if "X_processed" not in locals():
+                X_processed, y_processed, data_scaler, pca_processor = prepare_data()
+            X_train, X_test, y_train, y_test = train_test_split(
+                X_processed, y_processed, test_size=0.2, random_state=42
+            )
+            mlflow.log_param("random_state", 42)
+            mlflow.log_param("max_iter", 1000)
+
+        if args.train:
+            # Ensure data is prepared only if training
             X_train, X_test, y_train, y_test = train_test_split(
                 X_processed, y_processed, test_size=0.2, random_state=42
             )
@@ -47,7 +64,7 @@ def run_pipeline(args):
             # End any active run before starting evaluation
             if mlflow.active_run():
                 mlflow.end_run()
-            
+
             with mlflow.start_run():
                 # Load trained model and test data
                 loaded_model, loaded_scaler, loaded_pca = load_model()
@@ -71,6 +88,7 @@ def run_pipeline(args):
         if args.load:
             final_model, final_scaler, final_pca = load_model()
             print("Model loaded successfully!")
+
 
 if __name__ == "__main__":
     args = parse_arguments()

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/a90c435f713f4c6eb3e048d2d15011ba/artifacts
+end_time: 1740484296387
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a90c435f713f4c6eb3e048d2d15011ba
+run_name: intrigued-duck-213
+run_uuid: a90c435f713f4c6eb3e048d2d15011ba
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740484296143
+status: 3
+tags: []
+user_id: linda_wsl

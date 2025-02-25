@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1cf850e6aabe416aa2f1748c16a79c69/artifacts
+end_time: 1740500134835
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1cf850e6aabe416aa2f1748c16a79c69
+run_name: resilient-rook-948
+run_uuid: 1cf850e6aabe416aa2f1748c16a79c69
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740500134802
+status: 3
+tags: []
+user_id: linda_wsl

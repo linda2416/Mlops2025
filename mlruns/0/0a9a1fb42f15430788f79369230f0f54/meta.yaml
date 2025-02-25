@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/0a9a1fb42f15430788f79369230f0f54/artifacts
+end_time: 1740481057174
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0a9a1fb42f15430788f79369230f0f54
+run_name: casual-lark-17
+run_uuid: 0a9a1fb42f15430788f79369230f0f54
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740481056999
+status: 3
+tags: []
+user_id: linda_wsl

@@ -1,3 +1,4 @@
+#testingci
 # Déclaration des variables existantes
 PYTHON=python3
 ENV_NAME=venv
@@ -42,9 +43,7 @@ train:
 # Run tests
 test:
 	@echo "🧪 Running tests..."
-	@if [ ! -d "$(TEST_DIR)" ]; then echo "⚠️  Creating $(TEST_DIR) directory..."; mkdir -p $(TEST_DIR); fi
-	@if [ -z "$$(ls -A $(TEST_DIR))" ]; then echo "⚠️  No tests found! Creating a basic test..."; echo 'def test_dummy(): assert 2 + 2 == 4' > $(TEST_DIR)/test_dummy.py; fi
-	@./$(ENV_NAME)/bin/python3 -m pytest $(TEST_DIR) --disable-warnings
+	@PYTHONPATH=. pytest tests/
 	@echo "✅ Tests executed successfully!"
 
 # Evaluate the model
@@ -78,6 +77,8 @@ reinstall: clean setup
 
 # Full pipeline
 all: setup verify prepare train test evaluate save_model
+
+ci: all
 
 # Run FastAPI
 run_api:
@@ -130,3 +131,5 @@ status:
 	@echo "📊 État des images et conteneurs Docker..."
 	docker images
 	docker ps -a
+mlflow:
+	mlflow ui --host 0.0.0.0 --port 5001 &

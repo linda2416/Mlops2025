@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/da00deb86f3a40fbbde0d228cc8689c7/artifacts
+end_time: 1740500014229
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: da00deb86f3a40fbbde0d228cc8689c7
+run_name: mysterious-swan-19
+run_uuid: da00deb86f3a40fbbde0d228cc8689c7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740500014060
+status: 3
+tags: []
+user_id: linda_wsl

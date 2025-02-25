@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/d4de5533e837434c9ff7230ee2c7d48f/artifacts
+end_time: 1740500204212
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d4de5533e837434c9ff7230ee2c7d48f
+run_name: hilarious-steed-711
+run_uuid: d4de5533e837434c9ff7230ee2c7d48f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740500204179
+status: 3
+tags: []
+user_id: linda_wsl

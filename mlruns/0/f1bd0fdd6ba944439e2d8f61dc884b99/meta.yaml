@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/f1bd0fdd6ba944439e2d8f61dc884b99/artifacts
+end_time: 1740482771205
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f1bd0fdd6ba944439e2d8f61dc884b99
+run_name: flawless-elk-56
+run_uuid: f1bd0fdd6ba944439e2d8f61dc884b99
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740482770976
+status: 3
+tags: []
+user_id: linda_wsl

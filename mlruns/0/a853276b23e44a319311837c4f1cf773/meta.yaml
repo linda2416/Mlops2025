@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/a853276b23e44a319311837c4f1cf773/artifacts
+end_time: 1740427587448
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a853276b23e44a319311837c4f1cf773
+run_name: monumental-stoat-979
+run_uuid: a853276b23e44a319311837c4f1cf773
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740427587394
+status: 3
+tags: []
+user_id: linda_wsl

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/af24c5308777434191b5a4acd084a64d/artifacts
+end_time: 1740430775101
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: af24c5308777434191b5a4acd084a64d
+run_name: amazing-deer-851
+run_uuid: af24c5308777434191b5a4acd084a64d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740430774977
+status: 3
+tags: []
+user_id: linda_wsl

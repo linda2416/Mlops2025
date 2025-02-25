@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/fc12dff15fd04f429567a7caf4956f8d/artifacts
+end_time: 1740500011018
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fc12dff15fd04f429567a7caf4956f8d
+run_name: rogue-moth-873
+run_uuid: fc12dff15fd04f429567a7caf4956f8d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740500010963
+status: 3
+tags: []
+user_id: linda_wsl

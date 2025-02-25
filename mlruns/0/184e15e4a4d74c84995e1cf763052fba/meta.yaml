@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/184e15e4a4d74c84995e1cf763052fba/artifacts
+end_time: 1740500755738
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 184e15e4a4d74c84995e1cf763052fba
+run_name: chill-dog-969
+run_uuid: 184e15e4a4d74c84995e1cf763052fba
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740500755721
+status: 3
+tags: []
+user_id: linda_wsl

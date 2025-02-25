@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/bc2a1948ba74444ab42a05704ea9c22b/artifacts
+end_time: 1740501295963
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bc2a1948ba74444ab42a05704ea9c22b
+run_name: auspicious-ape-704
+run_uuid: bc2a1948ba74444ab42a05704ea9c22b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740501295944
+status: 3
+tags: []
+user_id: linda_wsl

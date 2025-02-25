@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/d9d7158f68fc4f3f8b87ca4c765c43ac/artifacts
+end_time: 1740430496629
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d9d7158f68fc4f3f8b87ca4c765c43ac
+run_name: polite-crow-632
+run_uuid: d9d7158f68fc4f3f8b87ca4c765c43ac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740430496485
+status: 3
+tags: []
+user_id: linda_wsl

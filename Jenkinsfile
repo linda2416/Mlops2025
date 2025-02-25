@@ -15,6 +15,14 @@ pipeline {
     }
 
     stages {
+        stage('Run CI') {
+            steps {
+                script {
+                    echo '🔄 Running CI pipeline...'
+                    sh 'make ci'
+                }
+            }
+        }
         stage('Setup Environment') {
             steps {
                 script {

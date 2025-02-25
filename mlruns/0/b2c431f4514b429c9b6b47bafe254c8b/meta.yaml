@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/b2c431f4514b429c9b6b47bafe254c8b/artifacts
+end_time: 1740500564902
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b2c431f4514b429c9b6b47bafe254c8b
+run_name: serious-shrew-738
+run_uuid: b2c431f4514b429c9b6b47bafe254c8b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740500564719
+status: 3
+tags: []
+user_id: linda_wsl

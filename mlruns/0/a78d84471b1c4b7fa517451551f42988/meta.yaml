@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/a78d84471b1c4b7fa517451551f42988/artifacts
+end_time: 1740430753897
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a78d84471b1c4b7fa517451551f42988
+run_name: rare-hare-219
+run_uuid: a78d84471b1c4b7fa517451551f42988
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740430753866
+status: 3
+tags: []
+user_id: linda_wsl

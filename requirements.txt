@@ -9,4 +9,5 @@ uvicorn
 joblib
 seaborn
 imbalanced-learn
-
+black
+pytest

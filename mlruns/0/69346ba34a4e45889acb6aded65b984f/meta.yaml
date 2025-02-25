@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/69346ba34a4e45889acb6aded65b984f/artifacts
+end_time: 1740433578434
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 69346ba34a4e45889acb6aded65b984f
+run_name: adorable-pug-162
+run_uuid: 69346ba34a4e45889acb6aded65b984f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740433578363
+status: 3
+tags: []
+user_id: linda_wsl

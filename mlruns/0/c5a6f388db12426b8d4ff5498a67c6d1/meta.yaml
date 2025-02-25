@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/c5a6f388db12426b8d4ff5498a67c6d1/artifacts
+end_time: 1740423444289
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c5a6f388db12426b8d4ff5498a67c6d1
+run_name: flawless-doe-645
+run_uuid: c5a6f388db12426b8d4ff5498a67c6d1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740423444073
+status: 3
+tags: []
+user_id: linda_wsl

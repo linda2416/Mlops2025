@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/e8122a7d8b3844bd9da358360933a617/artifacts
+end_time: 1740423419186
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e8122a7d8b3844bd9da358360933a617
+run_name: mercurial-doe-91
+run_uuid: e8122a7d8b3844bd9da358360933a617
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740423419136
+status: 3
+tags: []
+user_id: linda_wsl

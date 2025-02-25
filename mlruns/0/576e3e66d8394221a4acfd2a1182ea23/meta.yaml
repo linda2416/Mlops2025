@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/576e3e66d8394221a4acfd2a1182ea23/artifacts
+end_time: 1740500137992
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 576e3e66d8394221a4acfd2a1182ea23
+run_name: burly-hound-450
+run_uuid: 576e3e66d8394221a4acfd2a1182ea23
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740500137803
+status: 3
+tags: []
+user_id: linda_wsl

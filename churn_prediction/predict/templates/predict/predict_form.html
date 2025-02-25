@@ -2,60 +2,161 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Prediction Churn</title>
+    <title>Churn Prediction</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        h1 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid #eee;
+            width: 100%;
+        }
+
+        .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px; /* Increased from 20px to 40px for more space */
+}
+
+
+        .form-grid label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-grid input[type="text"], 
+        .form-grid input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            transition: all 0.3s;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-grid input[type="text"]:focus, 
+        .form-grid input[type="number"]:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(135deg, #55efc4, #81ecec);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #81ecec, #55efc4);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Prédiction de Churn</h1>
+    <div class="container">
+        <h1>Churn Prediction</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div>
+                    <label for="account_length">Account Length</label>
+                    <input type="number" step="1" id="account_length" name="account_length">
 
-    <form method="post">
-        {% csrf_token %}
-        <label for="account_length">Account Length:</label>
-        <input type="text" id="account_length" name="account_length"><br><br>
+                    <label for="international_plan">International Plan</label>
+                    <input type="text" id="international_plan" name="international_plan">
 
-        <label for="international_plan">International Plan:</label>
-        <input type="text" id="international_plan" name="international_plan"><br><br>
+                    <label for="voice_mail_plan">Voice Mail Plan</label>
+                    <input type="text" id="voice_mail_plan" name="voice_mail_plan">
 
-        <label for="voice_mail_plan">Voice Mail Plan:</label>
-        <input type="text" id="voice_mail_plan" name="voice_mail_plan"><br><br>
+                    <label for="number_vmail_messages">Number of Voice Mail Messages</label>
+                    <input type="number" step="1" id="number_vmail_messages" name="number_vmail_messages">
 
-        <label for="number_vmail_messages">Number of Voice Mail Messages:</label>
-        <input type="text" id="number_vmail_messages" name="number_vmail_messages"><br><br>
+                    <label for="total_day_minutes">Total Day Minutes</label>
+                    <input type="number" step="any" id="total_day_minutes" name="total_day_minutes">
 
-        <label for="total_day_minutes">Total Day Minutes:</label>
-        <input type="text" id="total_day_minutes" name="total_day_minutes"><br><br>
+                    <label for="total_day_calls">Total Day Calls</label>
+                    <input type="number" step="1" id="total_day_calls" name="total_day_calls">
 
-        <label for="total_day_calls">Total Day Calls:</label>
-        <input type="text" id="total_day_calls" name="total_day_calls"><br><br>
+                    <label for="total_day_charge">Total Day Charge</label>
+                    <input type="number" step="any" id="total_day_charge" name="total_day_charge">
+                </div>
+                <div>
+                    <label for="total_eve_minutes">Total Evening Minutes</label>
+                    <input type="number" step="any" id="total_eve_minutes" name="total_eve_minutes">
 
-        <label for="total_day_charge">Total Day Charge:</label>
-        <input type="text" id="total_day_charge" name="total_day_charge"><br><br>
+                    <label for="total_eve_calls">Total Evening Calls</label>
+                    <input type="number" step="1" id="total_eve_calls" name="total_eve_calls">
 
-        <label for="total_eve_minutes">Total Evening Minutes:</label>
-        <input type="text" id="total_eve_minutes" name="total_eve_minutes"><br><br>
+                    <label for="total_night_minutes">Total Night Minutes</label>
+                    <input type="number" step="any" id="total_night_minutes" name="total_night_minutes">
 
-        <label for="total_eve_calls">Total Evening Calls:</label>
-        <input type="text" id="total_eve_calls" name="total_eve_calls"><br><br>
+                    <label for="total_night_calls">Total Night Calls</label>
+                    <input type="number" step="1" id="total_night_calls" name="total_night_calls">
 
-        <label for="total_night_minutes">Total Night Minutes:</label>
-        <input type="text" id="total_night_minutes" name="total_night_minutes"><br><br>
+                    <label for="total_intl_minutes">Total International Minutes</label>
+                    <input type="number" step="any" id="total_intl_minutes" name="total_intl_minutes">
 
-        <label for="total_night_calls">Total Night Calls:</label>
-        <input type="text" id="total_night_calls" name="total_night_calls"><br><br>
+                    <label for="total_intl_calls">Total International Calls</label>
+                    <input type="number" step="1" id="total_intl_calls" name="total_intl_calls">
 
-        <label for="total_intl_minutes">Total International Minutes:</label>
-        <input type="text" id="total_intl_minutes" name="total_intl_minutes"><br><br>
+                    <label for="customer_service_calls">Customer Service Calls</label>
+                    <input type="number" step="1" id="customer_service_calls" name="customer_service_calls">
+                </div>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
 
-        <label for="total_intl_calls">Total International Calls:</label>
-        <input type="text" id="total_intl_calls" name="total_intl_calls"><br><br>
-
-        <label for="customer_service_calls">Customer Service Calls:</label>
-        <input type="text" id="customer_service_calls" name="customer_service_calls"><br><br>
-
-        <button type="submit">Predict</button>
-    </form>
-
-    {% if prediction is not None %}
-        <h2>Prediction: {{ prediction }}</h2>
-    {% endif %}
+        {% if prediction is not None %}
+            <h2>Prediction: {{ prediction }}</h2>
+        {% endif %}
+    </div>
 </body>
 </html>
