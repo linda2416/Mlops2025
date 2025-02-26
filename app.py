@@ -8,6 +8,7 @@ import numpy as np
 
 app = FastAPI()
 
+
 # Define the input data model
 class CustomerFeatures(BaseModel):
     account_length: float
@@ -25,12 +26,14 @@ class CustomerFeatures(BaseModel):
     total_intl_calls: float
     customer_service_calls: float
 
+
 # Load the model
 MODEL_PATH = "model.pkl"
 try:
     model = joblib.load(MODEL_PATH)
 except Exception as e:
     raise HTTPException(status_code=500, detail=f"Failed to load model: {str(e)}")
+
 
 @app.post("/predict/")
 async def predict(customer: CustomerFeatures):
@@ -62,6 +65,9 @@ async def predict(customer: CustomerFeatures):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @app.get("/")
 async def root():
-    return {"message": "Churn Prediction API - Use POST /predict with customer data. Ensure to push changes to GitHub for version control."}
+    return {
+        "message": "Churn Prediction API - Use POST /predict with customer data. Ensure to push changes to GitHub for version control."
+    }

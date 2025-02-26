@@ -1,6 +1,3 @@
-# def test_dummy(): assert 2 + 2 == 4
-
-# tests/test_model_pipeline.py
 import pytest
 from unittest.mock import MagicMock
 from model_pipeline import train_model
@@ -14,26 +11,17 @@ from sklearn.linear_model import LogisticRegression
 # Test unitaire pour la fonction train_model
 def test_train_model(mocker):
     # Créer des données factices pour l'entraînement
-    X_train, y_train = make_classification(
-        n_samples=100, n_features=20, random_state=42
-    )
+    X_train, y_train = make_classification(n_samples=100, n_features=20, random_state=42)
 
     # Mocking des dépendances externes
     mock_pca = mocker.patch("model_pipeline.PCA", return_value=MagicMock(spec=PCA))
     mock_pca.return_value.explained_variance_ratio_ = [0.95]  # Set the explained_variance_ratio_
     mock_pca.return_value.n_components = 0.95  # Set the n_components attribute
-    mock_smote = mocker.patch(
-        "model_pipeline.SMOTE", return_value=MagicMock(spec=SMOTE)
-    )
+    mock_smote = mocker.patch("model_pipeline.SMOTE", return_value=MagicMock(spec=SMOTE))
     mock_smote.return_value.fit_resample.return_value = (X_train, y_train)  # Ensure it returns the expected values
-    mock_enn = mocker.patch(
-        "model_pipeline.EditedNearestNeighbours",
-        return_value=MagicMock(spec=EditedNearestNeighbours),
-    )
-    mock_log_reg = mocker.patch(
-        "model_pipeline.LogisticRegression",
-        return_value=MagicMock(spec=LogisticRegression),
-    )
+    mock_enn = mocker.patch("model_pipeline.EditedNearestNeighbours", return_value=MagicMock(spec=EditedNearestNeighbours))
+    mock_log_reg = mocker.patch("model_pipeline.LogisticRegression", autospec=True)
+    mock_log_reg.return_value.fit = MagicMock()  # Ensure the fit method is a MagicMock
 
     # Simuler le comportement de PCA (par exemple, on suppose qu'il transforme les données)
     mock_pca.return_value.fit_transform.return_value = X_train  # X_train après PCA

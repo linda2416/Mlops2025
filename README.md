@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+# Mlops2025
+
+This project is designed for machine learning operations and includes various features and functionalities.
+
 # Mise à jour du fichier README pour tester le webhook
 
 ya rabiiii

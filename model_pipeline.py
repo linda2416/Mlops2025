@@ -2,200 +2,255 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import mlflow
+import logging
+import joblib
+from mlflow.models.signature import infer_signature
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from imblearn.under_sampling import EditedNearestNeighbours
 from imblearn.over_sampling import SMOTE
-import pickle
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-import mlflow
-import logging
+
+# Configuration MLflow
+MLFLOW_TRACKING_URI = "sqlite:///mlflow.db"
+
+MLFLOW_EXPERIMENT = "Churn Prediction Logistic"
+
+
+def setup_mlflow():
+    """Configure MLflow tracking avec gestion des runs actives"""
+    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+    mlflow.set_experiment(MLFLOW_EXPERIMENT)
+    # Do not end the main run here to allow nested runs to function correctly
 
 
 def prepare_data():
-    """Load and preprocess the dataset."""
-    print("Starting data preparation...")
+    """Charge et prépare les données avec tracking MLflow"""
+    logging.info("Starting data preparation...")
+    setup_mlflow()
+    try:
+        with mlflow.start_run(nested=True, run_name="Data Preparation") as run:
+            logging.info(f"Nested run ID: {run.info.run_id}")
+            logging.info("Logging and loading data...")
+            mlflow.log_artifact("merged_churn.csv")
+            df = pd.read_csv("merged_churn.csv")
 
-    df = pd.read_csv("merged_churn.csv")
-    print("Dataset loaded successfully!")
-    print("Checking for missing values and duplicates...")
+            # Log des métadonnées initiales
+            mlflow.log_params(
+                {
+                    "dataset_rows": df.shape[0],
+                    "initial_features": df.shape[1],
+                    "missing_values": df.isnull().sum().sum(),
+                    "duplicates": df.duplicated().sum(),
+                }
+            )
 
-    print("Missing values per column:\n", df.isnull().sum())
-    if df.isnull().sum().sum() > 0:
-        print("Warning: There are missing values in the dataset.")
-    print(f"Number of duplicate rows: {df.duplicated().sum()}")
+            # Préprocessing
+            target = df["Churn"]
+            features = df.drop(columns=["Churn"])
 
-    target = df["Churn"]
-    features = df.drop(columns=["Churn"])
-    print("Target variable separated. Proceeding with encoding...")
+            # Encodage
+            features["State"] = features["State"].map(
+                features["State"].value_counts().to_dict()
+            )
+            features["International plan"] = features["International plan"].map(
+                {"Yes": 1, "No": 0}
+            )
+            features["Voice mail plan"] = features["Voice mail plan"].map(
+                {"Yes": 1, "No": 0}
+            )
 
-    print("Applying frequency encoding for 'State'...")
-    print("Frequency encoding applied successfully.")
-    features["State"] = features["State"].map(
-        features["State"].value_counts().to_dict()
-    )
-    print("Frequency encoding applied")
+            # Standardisation
+            feature_scaler = StandardScaler()
+            features_scaled = feature_scaler.fit_transform(features)
 
-    print("Converting categorical variables to numeric...")
-    features["International plan"] = features["International plan"].map(
-        {"Yes": 1, "No": 0}
-    )
-    features["Voice mail plan"] = features["Voice mail plan"].map({"Yes": 1, "No": 0})
-    print("Categorical conversion completed. Proceeding with standardization...")
+            # Log des paramètres de preprocessing
+            mlflow.log_params(
+                {
+                    "scaler_type": type(feature_scaler).__name__,
+                    "scaled_features": features_scaled.shape[1],
+                }
+            )
 
-    print("Applying standardization...")
-    feature_scaler = StandardScaler()
-    features_scaled = feature_scaler.fit_transform(features)
-    print("Standardization completed. Data preprocessing completed!")
+            logging.info("Data preparation completed successfully.")
+            return features_scaled, target, feature_scaler, None
 
-    print("Data preprocessing completed!")
-    return features_scaled, target, feature_scaler, None
+    except Exception as e:
+        mlflow.end_run(status="FAILED")
+        logging.error(f"Échec préparation données : {str(e)}")
+        raise
 
 
 def train_model(train_features, train_labels):
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Starting model training...")
-    print("Starting model training...")
-    """Train a Logistic Regression model with SMOTE and ENN for handling class imbalance."""
+    """Entraîne le modèle avec tracking MLflow complet"""
+    setup_mlflow()
     try:
-        # Apply PCA transformation
-        pca_transformer = PCA(n_components=0.95)
-        train_features = pca_transformer.fit_transform(train_features)
+        with mlflow.start_run(nested=True, run_name="Model Training"):
+            # PCA
+            pca_transformer = PCA(n_components=0.95)
+            train_features_pca = pca_transformer.fit_transform(train_features)
 
-        # Log PCA parameters
-        mlflow.log_param("pca_n_components", 0.95)
-        mlflow.log_param(
-            "pca_explained_variance", sum(pca_transformer.explained_variance_ratio_)
-        )
+            mlflow.log_params(
+                {
+                    "pca_n_components": 0.95,
+                    "pca_explained_variance": round(
+                        np.array(pca_transformer.explained_variance_ratio_).sum(), 3
+                    ),
+                    "pca_components": train_features_pca.shape[1],
+                }
+            )
 
-        print("Shape of data before SMOTE:", train_features.shape)
-        print("Shape of labels before SMOTE:", train_labels.shape)
+            # Rééquilibrage SMOTE + ENN
+            smote = SMOTE(random_state=42)
+            X_resampled, Y_resampled = smote.fit_resample(
+                train_features_pca, train_labels
+            )
+            enn = EditedNearestNeighbours()
+            X_resampled_enn, Y_resampled_enn = enn.fit_resample(
+                X_resampled, Y_resampled
+            )
 
-        # Apply SMOTE for class balancing
-        print("Applying SMOTE for class balancing...")
-        smote = SMOTE(sampling_strategy="auto", random_state=42)
-        X_resampled, Y_resampled = smote.fit_resample(train_features, train_labels)
-        print("Shape after SMOTE:", X_resampled.shape)
+            mlflow.log_params(
+                {
+                    "sampling_strategy": "SMOTE+ENN",
+                    "resampled_samples": X_resampled_enn.shape[0],
+                    "smote_random_state": 42,
+                }
+            )
 
-        # Apply ENN for further class balancing
-        print("Applying ENN for further class balancing...")
-        enn = EditedNearestNeighbours()
-        X_resampled_enn, Y_resampled_enn = enn.fit_resample(X_resampled, Y_resampled)
-        print(
-            f"SMOTE + ENN applied: {X_resampled_enn.shape[0]} samples after resampling"
-        )
+            # Entraînement modèle
+            log_reg_model = LogisticRegression(
+                random_state=42, max_iter=1000, class_weight="balanced", solver="lbfgs"
+            )
 
-        # Train the Logistic Regression model
-        logging.info("Training the Logistic Regression model...")
-        mlflow.log_metric(
-            "training_accuracy", 0
-        )  # Initialize training accuracy logging
-        log_reg_model = LogisticRegression(
-            random_state=42, max_iter=1000, class_weight="balanced"
-        )
+            log_reg_model.fit(X_resampled_enn, Y_resampled_enn)
 
-        # Log model parameters
-        mlflow.log_param("model_type", "LogisticRegression")
-        mlflow.log_param("random_state", 42)
-        mlflow.log_param("max_iter", 1000)
-        mlflow.log_param("class_weight", "balanced")
+            # Log des hyperparamètres
+            mlflow.log_params(
+                {
+                    "model_type": "LogisticRegression",
+                    "solver": "lbfgs",
+                    "max_iter": 1000,
+                    "class_weight": "balanced",
+                }
+            )
 
-        log_reg_model.fit(X_resampled_enn, Y_resampled_enn)
-        training_accuracy = log_reg_model.score(
-            X_resampled_enn, Y_resampled_enn
-        )  # Calculate training accuracy
-        mlflow.log_metric(
-            "training_accuracy", training_accuracy
-        )  # Log training accuracy
-        logging.info("Model training completed!")
+            # Signature du modèle
+            input_example = X_resampled_enn[:1]
+            signature = infer_signature(
+                input_example, log_reg_model.predict(input_example)
+            )
 
-        return log_reg_model, pca_transformer
+            # Enregistrement MLflow
+            mlflow.sklearn.log_model(
+                sk_model=log_reg_model,
+                artifact_path="churn_model",
+                signature=signature,
+                registered_model_name="ChurnPredictionLogistic",
+                input_example=input_example,
+            )
+
+            return log_reg_model, pca_transformer
 
     except Exception as e:
-        logging.error(f"Error during model training: {e}")
-        print(f"Error during model training: {e}")
-        return None
+        mlflow.end_run(status="FAILED")
+        logging.error(f"Échec entraînement modèle : {str(e)}")
+        raise
 
 
 def evaluate_model(model_instance, test_features, test_labels):
-    """Evaluate the model's performance."""
-    print("Evaluating the model...")
+    """Évaluation complète avec tracking MLflow"""
+    setup_mlflow()
+    try:
+        with mlflow.start_run(nested=True, run_name="Model Evaluation"):
+            # Prédictions
+            predictions = model_instance.predict(test_features)
 
-    # Generate predictions
-    predictions = model_instance.predict(test_features)
+            # Calcul des métriques
+            accuracy = accuracy_score(test_labels, predictions)
+            report = classification_report(test_labels, predictions, output_dict=True)
+            conf_matrix = confusion_matrix(test_labels, predictions)
 
-    # Calculate metrics
-    accuracy = accuracy_score(test_labels, predictions)
-    report = classification_report(test_labels, predictions, output_dict=True)
-    conf_matrix = confusion_matrix(test_labels, predictions)
+            # Log des métriques et des prédictions
+            logging.info(f"Predictions: {predictions}")
+            logging.info(f"Unique classes in predictions: {np.unique(predictions)}")
+            precision_0 = report["0"]["precision"] if "0" in report else 0
+            recall_0 = report["0"]["recall"] if "0" in report else 0
+            f1_0 = report["0"]["f1-score"] if "0" in report else 0
+            precision_1 = report["1"]["precision"] if "1" in report else 0
+            recall_1 = report["1"]["recall"] if "1" in report else 0
+            f1_1 = report["1"]["f1-score"] if "1" in report else 0
 
-    # Log metrics to MLflow
-    mlflow.log_metric("accuracy", accuracy)
-    mlflow.log_metric("precision_false", report["False"]["precision"])
-    mlflow.log_metric("precision_true", report["True"]["precision"])
-    mlflow.log_metric("recall_false", report["False"]["recall"])
-    mlflow.log_metric("recall_true", report["True"]["recall"])
-    mlflow.log_metric("f1_false", report["False"]["f1-score"])
-    mlflow.log_metric("f1_true", report["True"]["f1-score"])
+            mlflow.log_metrics(
+                {
+                    "accuracy": accuracy,
+                    "precision_0": precision_0,
+                    "recall_0": recall_0,
+                    "f1_0": f1_0,
+                    "precision_1": precision_1,
+                    "recall_1": recall_1,
+                    "f1_1": f1_1,
+                }
+            )
 
-    # Log confusion matrix
-    mlflow.log_artifact(plot_confusion_matrix(conf_matrix), "confusion_matrix.png")
+            # Matrice de confusion
+            plt.figure(figsize=(8, 6))
+            sns.heatmap(
+                conf_matrix,
+                annot=True,
+                fmt="d",
+                cmap="Blues",
+                xticklabels=["Non Churn", "Churn"],
+                yticklabels=["Non Churn", "Churn"],
+            )
+            plt.xlabel("Prédit")
+            plt.ylabel("Réel")
+            plt.title("Matrice de Confusion")
+            plot_path = "confusion_matrix.png"
+            plt.savefig(plot_path)
+            plt.close()
 
-    # Print out the results
-    print(f"Model Accuracy: {accuracy:.4f}")
-    print("Classification Report:\n", classification_report(test_labels, predictions))
-    print("Confusion Matrix:\n", conf_matrix)
+            mlflow.log_artifact(plot_path)
 
-    # Return accuracy for logging
-    return accuracy
+            return accuracy
 
-
-def plot_confusion_matrix(conf_matrix):
-    """Plot and save confusion matrix."""
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(
-        conf_matrix,
-        annot=True,
-        fmt="d",
-        cmap="Blues",
-        xticklabels=["False", "True"],
-        yticklabels=["False", "True"],
-    )
-    plt.xlabel("Predicted")
-    plt.ylabel("Actual")
-    plt.title("Confusion Matrix")
-    file_path = "confusion_matrix.png"
-    plt.savefig(file_path)
-    plt.close()
-    return file_path
+    except Exception as e:
+        mlflow.end_run(status="FAILED")
+        logging.error(f"Échec évaluation modèle : {str(e)}")
+        raise
 
 
 def save_model(model_instance, feature_scaler, pca_transformer):
-    """Save model and preprocessing artifacts using pickle."""
-    print("Saving model and preprocessing artifacts...")
-    with open("./model.pkl", "wb") as model_file:
-        pickle.dump(model_instance, model_file)
-    with open("./scaler.pkl", "wb") as scaler_file:
-        pickle.dump(feature_scaler, scaler_file)
-    if pca_transformer:
-        with open("./pca.pkl", "wb") as pca_file:
-            pickle.dump(pca_transformer, pca_file)
-    print("Model, scaler, and PCA saved successfully!")
+    """Sauvegarde des artefacts locaux avec logging"""
+    try:
+        joblib.dump(model_instance, "model.pkl")
+        joblib.dump(feature_scaler, "scaler.pkl")
+        if pca_transformer:
+            joblib.dump(pca_transformer, "pca.pkl")
+        mlflow.log_artifacts(".", artifact_path="local_artifacts")
+    except Exception as e:
+        logging.error(f"Échec sauvegarde modèle : {str(e)}")
+        raise
 
 
 def load_model():
-    """Load the trained model, scaler, and PCA."""
-    print("Loading model and preprocessing artifacts...")
-    with open("./model.pkl", "rb") as model_file:
-        loaded_model_instance = pickle.load(model_file)
-    with open("./scaler.pkl", "rb") as scaler_file:
-        loaded_scaler_instance = pickle.load(scaler_file)
-    with open("./pca.pkl", "rb") as pca_file:
-        loaded_pca_instance = pickle.load(pca_file)
-    print("Model, scaler, and PCA loaded successfully!")
-    return loaded_model_instance, loaded_scaler_instance, loaded_pca_instance
+    """Chargement des artefacts locaux"""
+    try:
+        return (
+            joblib.load("model.pkl"),
+            joblib.load("scaler.pkl"),
+            joblib.load("pca.pkl"),
+        )
+    except Exception as e:
+        logging.error(f"Échec chargement modèle : {str(e)}")
+        raise
 
 
 if __name__ == "__main__":

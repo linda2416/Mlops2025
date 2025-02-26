@@ -1,10 +1,8 @@
-import mlflow
-import mlflow.sklearn
-import numpy as np
-import pandas as pd
 import argparse
+import mlflow
 from sklearn.model_selection import train_test_split
 from model_pipeline import (
+    setup_mlflow,
     prepare_data,
     train_model,
     evaluate_model,
@@ -13,84 +11,55 @@ from model_pipeline import (
 )
 
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(description="ML Pipeline")
-    parser.add_argument("--prepare", action="store_true", help="Prepare data")
-    parser.add_argument("--train", action="store_true", help="Train model")
-    parser.add_argument("--evaluate", action="store_true", help="Evaluate model")
-    parser.add_argument("--save", action="store_true", help="Save model")
-    parser.add_argument("--load", action="store_true", help="Load model")
-    return parser.parse_args()
+def execute_pipeline(args):
+    """Exécute le pipeline complet avec gestion des runs MLflow"""
+    setup_mlflow()
 
-
-def run_pipeline(args, tracking_uri="http://localhost:5001"):
-    mlflow.set_tracking_uri(tracking_uri)
-    print("Script execution started... Ensure to push changes to GitHub for version control.")
-
-    with mlflow.start_run():
+    with mlflow.start_run(run_name="Main Pipeline"):
+        # Préparation des données
         if args.prepare:
-            X_processed, y_processed, data_scaler, pca_processor = prepare_data()
-            print("Data preparation finished")
+            with mlflow.start_run(nested=True, run_name="Data Preparation"):
+                prepare_data()
 
+        # Entraînement
         if args.train:
-            # Ensure data is prepared only if training
-            if "X_processed" not in locals():
-                X_processed, y_processed, data_scaler, pca_processor = prepare_data()
-            X_train, X_test, y_train, y_test = train_test_split(
-                X_processed, y_processed, test_size=0.2, random_state=42
-            )
-            mlflow.log_param("random_state", 42)
-            mlflow.log_param("max_iter", 1000)
+            with mlflow.start_run(nested=True, run_name="Model Training"):
+                features, target, scaler, _ = prepare_data()
+                X_train, X_test, y_train, y_test = train_test_split(
+                    features, target, test_size=0.2, random_state=42
+                )
+                mlflow.log_param("test_size", 0.2)
+                model, pca = train_model(X_train, y_train)
 
-        if args.train:
-            # Ensure data is prepared only if training
-            X_train, X_test, y_train, y_test = train_test_split(
-                X_processed, y_processed, test_size=0.2, random_state=42
-            )
-            mlflow.log_param("random_state", 42)
-            mlflow.log_param("max_iter", 1000)
-            try:
-                mlflow.log_param("model_name", "Logistic Regression")
-                trained_log_reg_model = train_model(X_train, y_train)
-                print("Model training finished")
-                return trained_log_reg_model, X_test, y_test
-            except Exception as e:
-                mlflow.log_param("training_status", "failed")
-                mlflow.log_metric("error", str(e))
-                print(f"Model training failed: {e}")
-                raise
-
+        # Évaluation
         if args.evaluate:
-            # End any active run before starting evaluation
-            if mlflow.active_run():
-                mlflow.end_run()
+            with mlflow.start_run(nested=True, run_name="Model Evaluation"):
+                model, scaler, pca = load_model()
+                features, target, _, _ = prepare_data()
+                features_pca = pca.transform(scaler.transform(features))
+                accuracy = evaluate_model(model, features_pca, target)
+                mlflow.log_metric("final_accuracy", accuracy)
 
-            with mlflow.start_run():
-                # Load trained model and test data
-                loaded_model, loaded_scaler, loaded_pca = load_model()
-                X_processed, y_processed, _, _ = prepare_data()
-                X_test = loaded_pca.transform(loaded_scaler.transform(X_processed))
-                try:
-                    accuracy = evaluate_model(loaded_model, X_test, y_processed)
-                    print("Model evaluation completed")
-                    mlflow.log_metric("accuracy", accuracy)
-                except Exception as e:
-                    mlflow.log_param("evaluation_status", "failed")
-                    mlflow.log_metric("error", str(e))
-                    print(f"Model evaluation failed: {e}")
-                    raise
-
+        # Sauvegarde
         if args.save:
-            trained_log_reg_model, _, _ = run_pipeline(argparse.Namespace(train=True))
-            X_processed, _, data_scaler, pca_processor = prepare_data()
-            save_model(trained_log_reg_model, data_scaler, pca_processor)
-
-        if args.load:
-            final_model, final_scaler, final_pca = load_model()
-            print("Model loaded successfully!")
+            with mlflow.start_run(nested=True, run_name="Model Saving"):
+                model, scaler, pca = load_model()
+                save_model(model, scaler, pca)
+                mlflow.log_artifact("model.pkl")
 
 
 if __name__ == "__main__":
-    args = parse_arguments()
-    run_pipeline(args)
-    print("Script execution completed!")
+    parser = argparse.ArgumentParser(description="Pipeline de prédiction de churn")
+    parser.add_argument("--prepare", action="store_true", help="Préparer les données")
+    parser.add_argument("--train", action="store_true", help="Entraîner le modèle")
+    parser.add_argument("--evaluate", action="store_true", help="Évaluer le modèle")
+    parser.add_argument("--save", action="store_true", help="Sauvegarder le modèle")
+
+    args = parser.parse_args()
+
+    try:
+        execute_pipeline(args)
+        print("✅ Pipeline exécuté avec succès !")
+    except Exception as e:
+        print(f"❌ Erreur lors de l'exécution : {str(e)}")
+        raise

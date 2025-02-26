@@ -133,3 +133,6 @@ status:
 	docker ps -a
 mlflow:
 	mlflow ui --host 0.0.0.0 --port 5001 &
+
+mlflow_sqlite:
+	mlflow ui --backend-store-uri sqlite:///mlflow.db --host 0.0.0.0 --port 5000
