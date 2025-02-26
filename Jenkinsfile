@@ -8,17 +8,17 @@ pipeline {
 
     stages {
         // Stage 1: Set up the virtual environment
-        stage('Setup Environment') {
+        stage('Setup') {
             steps {
-                script {
-                    echo '🔧 Setting up the virtual environment...'
-                    sh '''
-                        python3 -m venv venv
-                        . venv/bin/activate
-                        pip install -r requirements.txt
-                    '''
-                    echo '✅ Environment set up successfully!'
-                }
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                export PIP_BREAK_SYSTEM_PACKAGES=1
+                pip install --upgrade pip
+                pip install -r ./requirements.txt
+
+                echo "Environment configured successfully!"
+                '''
             }
         }
 
