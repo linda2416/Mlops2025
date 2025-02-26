@@ -4,28 +4,18 @@ pipeline {
     stages {
         // Stage 1: Install python3-venv and set up the virtual environment
         stage('Setup') {
-            steps {
-                sh '''
-                    # Install python3-venv if not already installed
-                    if ! python3 -m venv --help &> /dev/null; then
-                        echo "python3-venv is not installed. Installing now..."
-                        sudo apt-get update
-                        sudo apt-get install -y python3-venv
-                    fi
+    steps {
+        sh '''
+            python3 -m venv --system-site-packages venv
+            . venv/bin/activate
+            export PIP_BREAK_SYSTEM_PACKAGES=1
+            pip install --upgrade pip
+            pip install -r ./requirements.txt
 
-                    # Create and activate the virtual environment
-                    python3 -m venv venv
-                    . venv/bin/activate
-
-                    # Upgrade pip and install dependencies
-                    export PIP_BREAK_SYSTEM_PACKAGES=1
-                    pip install --upgrade pip
-                    pip install -r ./requirements.txt
-
-                    echo "Environment configured successfully!"
-                '''
-            }
-        }
+            echo "Environment configured successfully!"
+        '''
+    }
+}
 
         // Stage 2: Prepare the data
         stage('Prepare Data') {
