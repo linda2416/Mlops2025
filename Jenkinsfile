@@ -1,11 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11-slim' // Use a pre-configured Python image
-            args '-u root' // Run as root to avoid permission issues
-        }
-    }
-
+    agent any
     stages {
         // Stage 1: Set up the virtual environment
         stage('Setup') {
