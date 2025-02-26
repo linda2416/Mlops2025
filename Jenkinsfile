@@ -1,17 +1,28 @@
 pipeline {
     agent any
+
     stages {
-        // Stage 1: Set up the virtual environment
+        // Stage 1: Install python3-venv and set up the virtual environment
         stage('Setup') {
             steps {
                 sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                export PIP_BREAK_SYSTEM_PACKAGES=1
-                pip install --upgrade pip
-                pip install -r ./requirements.txt
+                    # Install python3-venv if not already installed
+                    if ! python3 -m venv --help &> /dev/null; then
+                        echo "python3-venv is not installed. Installing now..."
+                        apt-get update
+                        apt-get install -y python3-venv
+                    fi
 
-                echo "Environment configured successfully!"
+                    # Create and activate the virtual environment
+                    python3 -m venv venv
+                    . venv/bin/activate
+
+                    # Upgrade pip and install dependencies
+                    export PIP_BREAK_SYSTEM_PACKAGES=1
+                    pip install --upgrade pip
+                    pip install -r ./requirements.txt
+
+                    echo "Environment configured successfully!"
                 '''
             }
         }
