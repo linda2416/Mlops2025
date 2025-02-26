@@ -9,8 +9,8 @@ pipeline {
                     # Install python3-venv if not already installed
                     if ! python3 -m venv --help &> /dev/null; then
                         echo "python3-venv is not installed. Installing now..."
-                        apt-get update
-                        apt-get install -y python3-venv
+                        sudo apt-get update
+                        sudo apt-get install -y python3-venv
                     fi
 
                     # Create and activate the virtual environment
