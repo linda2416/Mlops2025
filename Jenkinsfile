@@ -1,25 +1,20 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11-slim' // Use a pre-configured Python image
+            args '-u root' // Run as root to avoid permission issues
+        }
+    }
 
     stages {
-        // Stage 1: Install python3-venv and set up the virtual environment
+        // Stage 1: Set up the virtual environment
         stage('Setup Environment') {
             steps {
                 script {
-                    echo '🔧 Installing python3-venv and setting up the virtual environment...'
+                    echo '🔧 Setting up the virtual environment...'
                     sh '''
-                        # Install python3-venv if not already installed
-                        if ! python3 -m venv --help &> /dev/null; then
-                            echo "python3-venv is not installed. Installing now..."
-                            apt-get update
-                            apt-get install -y python3-venv
-                        fi
-
-                        # Create and activate the virtual environment
                         python3 -m venv venv
                         . venv/bin/activate
-
-                        # Install dependencies
                         pip install -r requirements.txt
                     '''
                     echo '✅ Environment set up successfully!'
