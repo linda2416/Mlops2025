@@ -37,7 +37,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
-                . venv/bin/activate
                 echo "Tests executed successfully!"
                 '''
             }
